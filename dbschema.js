@@ -11,25 +11,22 @@ let db = {
         location: 'Lonodn, UK'
       }
     ],
-    posts: [
+    comments: [
       {
-        user: 'user',
-        title: 'This is a sample post',
+        body: 'This is a post body',
         createdAt: '2019-03-15T10:59:52.798Z',
-        likes: 5,
-        comments: 3
+        post: 'deSHhrgwh3W3yrHvsq2W',
+        user: 'rakmo'
       }
-    ]
-    };
-    // ],
-    // comments: [
-    //   {
-    //     userHandle: 'user',
-    //     screamId: 'kdjsfgdksuufhgkdsufky',
-    //     body: 'nice one mate!',
-    //     createdAt: '2019-03-15T10:59:52.798Z'
-    //   }
-    // ],
+    ],
+    likes: [
+      {
+        post: 'deSHhrgwh3W3yrHvsq2W',
+        user: 'rakmo'
+      }
+    ],
+    
+  };
     // notifications: [
     //   {
     //     recipient: 'user',
