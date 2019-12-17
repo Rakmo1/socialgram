@@ -1,12 +1,12 @@
 const { admin, db }=require('../util/admin');
 
-exports.getPosts=(req,res)=>{
+exports.getAllPosts=(req,res)=>{
     db.collection('posts').get()
     .then((data)=>{
       let posts=[];
       data.forEach((doc)=>{
         console.log(doc.id);
-        posts.push(doc.data());
+        posts.push({...doc.data(), postId: doc.id});
       })
       return res.json(posts);
     })
@@ -40,6 +40,7 @@ exports.getPost=(req,res)=>{
     const newPost={
       title: req.body.title,
       user: req.user.username,
+      userImage: req.user.userImage,
       likeCount:0,
       commentCount:0,
       createdAt: new Date().toISOString()

@@ -11,6 +11,16 @@ let db = {
         location: 'Lonodn, UK'
       }
     ],
+    posts: [
+      {
+        commentCount: 0,
+        createdAt: "2019-12-17T16:42:34.695Z",
+        likeCount: 0,
+        title: "Hello World",
+        user: "rakmo",
+        userImage: 'https://firebasestorage.googleapis.com/v0/b/socialgram-8f52c.appspot.com/o/no-image.png?alt=media'
+      }
+    ],
     comments: [
       {
         body: 'This is a post body',
@@ -25,18 +35,17 @@ let db = {
         user: 'rakmo'
       }
     ],
-    
+    notifications: [
+        {
+            recipient: 'user',
+            sender: 'john',
+            read: 'true | false',
+            post: 'kdjsfgdksuufhgkdsufky',
+            type: 'like | comment',
+            createdAt: '2019-03-15T10:59:52.798Z'
+          }
+        ]
   };
-    // notifications: [
-    //   {
-    //     recipient: 'user',
-    //     sender: 'john',
-    //     read: 'true | false',
-    //     screamId: 'kdjsfgdksuufhgkdsufky',
-    //     type: 'like | comment',
-    //     createdAt: '2019-03-15T10:59:52.798Z'
-    //   }
-    // ]
   const userDetails = {
     // Redux data
     credentials: {

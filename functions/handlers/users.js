@@ -51,7 +51,14 @@ exports.signup=(req,res)=>{
           return res.status(200).json({message: token});
         })
         .catch(err=>{
-          return res.status(500).json({err: err});
+          if (err.code === 'auth/email-already-in-use') {
+            return res.status(400).json({ email: 'Email is already is use' });
+          } 
+          else {
+            return res
+              .status(500)
+              .json({ general: 'Something went wrong, please try again' });
+          }
         })
     }
   
@@ -76,7 +83,7 @@ exports.signup=(req,res)=>{
           return res.status(200).json({message: token});
         })
         .catch(err=>{
-          return res.status(200).json({error: err});
+          return res.status(403).json({ general: 'Wrong credentials, please try again' });
         })
     }
   
@@ -163,12 +170,62 @@ exports.signup=(req,res)=>{
       data.forEach((doc)=>{
         details.likes.push(doc.data());
       })
+      return db.collection('notifications').where('recipient','==',req.user.username)
+      .orderBy('createdAt','desc').limit(10).get();
+    })
+    .then(data=>{
+      details.notifications=[];
+      data.forEach((doc)=>{
+        details.notifications.push({...doc.data(),notificationId: doc.id});
+      })
       return res.status(200).json(details);
     })
     .catch(err=>{
       return res.status(400).json({error:err});
     })
   }
+
+  exports.getUserDetails=(req,res)=>{
+    let user={};
+    db.doc(`/users/${req.params.username}`).get()
+    .then(doc=>{
+      if(doc.exists){
+        user.data=doc.data();
+        return db.collection('posts').where('user','==',req.params.username).orderBy('createdAt','desc').get();
+      }
+      else{
+        return res.status(500).json({error: 'User not found'});
+      }
+    })
+    .then(data=>{
+      user.posts=[];
+      data.forEach(doc=>{
+        user.posts.push(doc.data());
+      });
+      return res.json(user);
+    })
+    .catch(err=>{
+      res.status(500).json({err});
+    })
+
+  }
+
+  exports.markNotificationsAsRead=(req,res)=>{
+    let batch=db.batch();
+    req.body.forEach(notificationId=>{
+      const notificationDocument= db.doc(`/notifications/${notificationId}`);
+      batch.update(notificationDocument,{read: true}); 
+    });
+    batch.commit()
+    .then(()=>{
+      return res.status(200).json({message: 'Notifications marked read'});
+    })
+    .catch((err)=>{
+      console.log(err);
+      return res.status(500).json({err});
+    })
+  }
+
   // exports.deleteUploadedImage=(req,res)=>{
   //   let username=req.user.username;
   //   db.doc(`/users/${username}`).get()
